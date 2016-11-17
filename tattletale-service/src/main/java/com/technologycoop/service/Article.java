@@ -6,8 +6,7 @@ import java.util.Date;
 
 public interface Article {
 
-    // todo: add title
-
+    String getTitle();
     URL getURL();
     String getContent();
     Date getPublicationDate();

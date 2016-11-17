@@ -16,6 +16,7 @@ public class SnopesArticle implements Article {
     private static final int TIMEOUT_SECONDS = 5;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
+    private final String title;
     private final URL url;
     private final String content;
     private final Date publicationDate;
@@ -33,6 +34,10 @@ public class SnopesArticle implements Article {
             Elements publicationDate = document.select("[itemprop=datePublished]");
             assert publicationDate.size() == 1;
 
+            Elements titleElements = document.select("meta[property=og:title]");
+            assert titleElements.size() == 1;
+
+            this.title = titleElements.first().attr("content");
             this.url = url;
             this.content = articles.first().text();
             this.publicationDate =  DATE_FORMAT.parse(publicationDate.first().attr("content")); //Instant.parse(publicationDate.first().attr("content"));
@@ -40,6 +45,11 @@ public class SnopesArticle implements Article {
         } catch (IOException | ParseException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 
     @Override
